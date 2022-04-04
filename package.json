@@ -1,13 +1,13 @@
 {
 	"name": "khaleesi-js",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Скрипт для имитирования речи Кхалиси. Работает на чистом JS без сторонних библиотек.",
 	"main": "src/khaleesi.js",
 	"module": "src/khaleesi.mjs",
 	"exports": {
 		".": {
 			"import": "./src/khaleesi.mjs",
-      "require": "./src/khaleesi.js"
+			"require": "./src/khaleesi.js"
 		}
 	},
 	"scripts": {},

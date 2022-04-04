@@ -4,8 +4,12 @@
 
 ## Использование
 
+Установить через npm – `npm i github:serguun42/Khaleesi-JS`
+
+Можно использовать и как ESM и как CommonJS-модуль:
 ```javascript
-import Khaleesi from "./khaleesi.js"; // Подключаем или полностью вставляем код из файла
+import Khaleesi from "khaleesi-js"; // ESM
+const Khaleesi = require("khaleesi-js"); // Или CommonJS
 
 const phrase = "Кхалиси – худший из ботов в мире";
 const remade = Khaleesi(phrase);
