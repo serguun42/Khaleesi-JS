@@ -327,7 +327,7 @@ const KhaleesiEngine = {
  * @param {string} message
  * @returns {string}
  */
-const Khaleesi = (message) => {
+export const Khaleesi = (message) => {
 	const result = [];
 
 	KhaleesiUtils.getWords(message.trim()).map((word) => {
