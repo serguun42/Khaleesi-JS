@@ -9,16 +9,14 @@ const KhaleesiPostCorrection = {
 		words.forEach((word) => {
 			if (word.length < 2) return result.push(word);
 
-			if (/ийи/gi.test(word))
-				return result.push(word.replace(/(и)й(и)/gi, "$1$2"));
+			if (/ийи/gi.test(word)) return result.push(word.replace(/(и)й(и)/gi, "$1$2"));
 
 			if (/^(сьто|чьто)/.test(word)) {
-				const randomWhat = KhaleesiPostCorrection.WHATS[
-					Math.floor(KhaleesiPostCorrection.WHATS.length * Math.random())
-				];
+				const randomWhat =
+					KhaleesiPostCorrection.WHATS[Math.floor(KhaleesiPostCorrection.WHATS.length * Math.random())];
 
 				return result.push(word.replace(/^(сьто|чьто)/, randomWhat));
-			};
+			}
 
 			result.push(KhaleesiPostCorrection.randomMixWord(word));
 		});
@@ -36,7 +34,7 @@ const KhaleesiPostCorrection = {
 		for (let i = mixedUpRules.length - 1; i > 0; i--) {
 			let j = Math.floor(Math.random() * i);
 			[mixedUpRules[i], mixedUpRules[j]] = [mixedUpRules[j], mixedUpRules[i]];
-		};
+		}
 
 		mixedUpRules.slice(0, 10).forEach((rule) => {
 			const [from, to] = rule;
@@ -47,9 +45,7 @@ const KhaleesiPostCorrection = {
 		return word;
 	},
 
-	WHATS: [
-		"чьто", "сто", "шьто", "што"
-	],
+	WHATS: ["чьто", "сто", "шьто", "што"],
 
 	POST_CORRECTION_RULES: [
 		["ожк", "озьг"],
@@ -110,10 +106,10 @@ const KhaleesiPostCorrection = {
 
 const KhaleesiUtils = {
 	/** @param {string} str @returns {string[]} */
-	getWords: str => str.split(/(\s+)/),
+	getWords: (str) => str.split(/(\s+)/),
 
 	/** @param {string} word @returns {boolean} */
-	hasCyrillics: word => /[а-яё]/i.test(word),
+	hasCyrillics: (word) => /[а-яё]/i.test(word),
 
 	/**
 	 * @param {string} word
@@ -138,7 +134,7 @@ const KhaleesiUtils = {
 			return replacement.toUpperCase();
 		else
 			return replacement.toLowerCase();
-	},
+	}
 };
 
 const KhaleesiEngine = {
@@ -240,18 +236,20 @@ const KhaleesiEngine = {
 
 				if (replacement == "_") replacement = "";
 
-
 				regexpPatternArr.push("(");
-				search.replace(/\s/g, "").split("").forEach((element) => {
-					if (element == "@")
-						regexpPatternArr.push(`)(${char})(`);
-					else if (element == "Г")
-						regexpPatternArr.push("[ьъаеёиоуыэюя]");
-					else if (element == "С" | element == "C")
-						regexpPatternArr.push("[ьъйцкнгшщзхфвпрлджбтмсч]");
-					else
-						regexpPatternArr.push(element);
-				});
+				search
+					.replace(/\s/g, "")
+					.split("")
+					.forEach((element) => {
+						if (element === "@")
+							regexpPatternArr.push(`)(${char})(`);
+						else if (element === "Г")
+							regexpPatternArr.push("[ьъаеёиоуыэюя]");
+						else if (element === "С" || element === "C")
+							regexpPatternArr.push("[ьъйцкнгшщзхфвпрлджбтмсч]");
+						else
+							regexpPatternArr.push(element);
+					});
 				regexpPatternArr.push(")");
 
 				tripples.push({
@@ -261,7 +259,7 @@ const KhaleesiEngine = {
 			});
 
 			tripplesObj[char] = tripples;
-		};
+		}
 
 		return tripplesObj;
 	},
@@ -274,8 +272,7 @@ const KhaleesiEngine = {
 		if (!Object.keys(KhaleesiEngine.globalReplaces).length)
 			KhaleesiEngine.globalReplaces = KhaleesiEngine.getReplaces();
 
-		if (!KhaleesiUtils.hasCyrillics(word))
-			return word;
+		if (!KhaleesiUtils.hasCyrillics(word)) return word;
 
 		const result = [];
 
@@ -289,7 +286,7 @@ const KhaleesiEngine = {
 						prevChar,
 						currentChar,
 						nextChar,
-						lowerCurrentChar,
+						lowerCurrentChar
 					})
 				);
 			else
@@ -316,11 +313,10 @@ const KhaleesiEngine = {
 				currentCharReplacedFlag = true;
 
 				replacedChar = replacedChar.toLowerCase();
-				if (currentChar !== lowerCurrentChar)
-					replacedChar = replacedChar.toUpperCase();
+				if (currentChar !== lowerCurrentChar) replacedChar = replacedChar.toUpperCase();
 
 				return;
-			};
+			}
 		});
 
 		return replacedChar;
@@ -331,7 +327,7 @@ const KhaleesiEngine = {
  * @param {string} message
  * @returns {string}
  */
-const Khaleesi = message => {
+const Khaleesi = (message) => {
 	const result = [];
 
 	KhaleesiUtils.getWords(message.trim()).map((word) => {

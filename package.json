@@ -1,0 +1,25 @@
+{
+	"name": "khaleesi-js",
+	"version": "1.0.0",
+	"description": "Скрипт для имитирования речи Кхалиси. Работает на чистом JS без сторонних библиотек.",
+	"main": "khaleesi.js",
+	"type": "module",
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/serguun42/Khaleesi-JS.git"
+	},
+	"keywords": [
+		"DTF",
+		"TJournal",
+		"Khaleesi",
+		"cmtt",
+		"Osnova"
+	],
+	"author": "serguun42",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/serguun42/Khaleesi-JS/issues"
+	},
+	"homepage": "https://github.com/serguun42/Khaleesi-JS#readme"
+}
