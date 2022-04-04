@@ -1,50 +1,51 @@
 const KhaleesiPostCorrection = {
 	/**
-	 * @param {String[]} iWords
-	 * @returns {String[]}
+	 * @param {string[]} words
+	 * @returns {string[]}
 	 */
-	getPostCorrection: iWords => {
-		let result = new Array();
+	postCorrection(words) {
+		const result = [];
 
-		iWords.forEach((word) => {
-			if (word.length < 2) return result.push(word)
-			
+		words.forEach((word) => {
+			if (word.length < 2) return result.push(word);
+
 			if (/ийи/gi.test(word))
 				return result.push(word.replace(/(и)й(и)/gi, "$1$2"));
 
 			if (/^(сьто|чьто)/.test(word)) {
-				let randomWhat = KhaleesiPostCorrection.WHATS[Math.floor(KhaleesiPostCorrection.WHATS.length * Math.random())];
+				const randomWhat = KhaleesiPostCorrection.WHATS[
+					Math.floor(KhaleesiPostCorrection.WHATS.length * Math.random())
+				];
+
 				return result.push(word.replace(/^(сьто|чьто)/, randomWhat));
 			};
 
-			result.push(KhaleesiPostCorrection.randomMixWord(word))
+			result.push(KhaleesiPostCorrection.randomMixWord(word));
 		});
 
 		return result;
 	},
 
-	
 	/**
-	 * @param {String} word
-	 * @returns {String}
+	 * @param {string} word
+	 * @returns {string}
 	 */
-	randomMixWord: (word) => {
-		let mixedUpRules = KhaleesiPostCorrection.POST_CORRECTION_RULES.slice(0);
+	randomMixWord(word) {
+		const mixedUpRules = KhaleesiPostCorrection.POST_CORRECTION_RULES.slice(0);
 
-		for (let i = mixedUpRules.length - 1; i > 0; i--){
+		for (let i = mixedUpRules.length - 1; i > 0; i--) {
 			let j = Math.floor(Math.random() * i);
 			[mixedUpRules[i], mixedUpRules[j]] = [mixedUpRules[j], mixedUpRules[i]];
 		};
 
 		mixedUpRules.slice(0, 10).forEach((rule) => {
-			let [from, to] = rule;
+			const [from, to] = rule;
 			if (word.search(from) > -1)
 				word = word.replace(from, to);
 		});
 
 		return word;
 	},
-
 
 	WHATS: [
 		"чьто", "сто", "шьто", "што"
@@ -108,51 +109,41 @@ const KhaleesiPostCorrection = {
 };
 
 const KhaleesiUtils = {
-	/**
-	 * @param {String} iString
-	 * @returns {String[]}
-	 */
-	getWords: iString => iString.split(/(\s+)/),
+	/** @param {string} str @returns {string[]} */
+	getWords: str => str.split(/(\s+)/),
+
+	/** @param {string} word @returns {boolean} */
+	hasCyrillics: word => /[а-яё]/i.test(word),
 
 	/**
-	 * @param {String} iWord
-	 * @returns {Boolean}
+	 * @param {string} word
+	 * @returns {[string, string, string][]}
 	 */
-	hasCyrillics: iWord => /[а-я]/i.test(iWord),
+	previousAndNext(word) {
+		const result = [];
 
-	/**
-	 * @param {String} iWord
-	 * @returns {Array.<[String, String, String]>}
-	 */
-	previousAndNext: iWord => {
-		let result = new Array();
-
-		for (let i = 0; i < iWord.length; i++)
-			result.push([
-				(i == 0 ? "" : iWord[i - 1]),
-				iWord[i],
-				(i == iWord.length - 1 ? "" : iWord[i + 1])
-			]);
+		for (let i = 0; i < word.length; i++)
+			result.push([word[i - 1] || "", word[i], word[i + 1] || ""]);
 
 		return result;
 	},
 
 	/**
-	 * @param {String} iChar
-	 * @param {String} iReplacement
-	 * @returns {String}
+	 * @param {string} char
+	 * @param {string} replacement
+	 * @returns {string}
 	 */
-	replaceWithCase: (iChar, iReplacement) => {
-		if (iChar.toUpperCase() === iChar)
-			return iReplacement.toUpperCase();
+	replaceWithCase(char, replacement) {
+		if (char.toUpperCase() === char)
+			return replacement.toUpperCase();
 		else
-			return iReplacement.toLowerCase();
+			return replacement.toLowerCase();
 	},
 };
 
 const KhaleesiEngine = {
-	/** @type {{[x: string]: Array.<{regexp: RegExp, replacement: String}>}} */
-	globalReplaces: new Object(),
+	/** @type {{[x: string]: { regexp: RegExp, replacement: string }[]}} */
+	globalReplaces: {},
 
 	VOWELS: "аеёиоуыэюя",
 	CONSONANTS: "йцкнгшщзхфвпрлджбтмсч",
@@ -230,25 +221,24 @@ const KhaleesiEngine = {
 	},
 
 	/**
-	 * @returns {{[x: string]: Array.<{regexp: RegExp, replacement: String}>}}
+	 * @returns {{[x: string]: { regexp: RegExp, replacement: string }[]}}
 	 */
-	getReplaces: () => {
+	getReplaces() {
 		/* Теперь на основе этих глобальных правил делаем регулярные выражения */
-		let tripplesObj = new Object();
+		const tripplesObj = {};
 
-		for (let char in KhaleesiEngine.REPLACES_RULES) {
-			let stringPatterns = KhaleesiEngine.REPLACES_RULES[char];
+		for (const char in KhaleesiEngine.REPLACES_RULES) {
+			const stringPatterns = KhaleesiEngine.REPLACES_RULES[char];
 
-			/** @type {Array.<{regexp: RegExp, replacement: String}>} */
-			let tripples = new Array();
+			/** @type {{ regexp: RegExp, replacement: string }[]} */
+			const tripples = [];
 
 			stringPatterns.forEach((stringPattern) => {
-				let regexpPatternArr = new Array(),
-					[search, replacement] = stringPattern.split("=");
-					replacement = replacement.trim().replace(/\@/g, char);
+				const regexpPatternArr = [];
+				let [search, replacement] = stringPattern.split("=");
+				replacement = replacement.trim().replace(/\@/g, char);
 
-				if (replacement == "_")
-					replacement = "";
+				if (replacement == "_") replacement = "";
 
 
 				regexpPatternArr.push("(");
@@ -264,9 +254,10 @@ const KhaleesiEngine = {
 				});
 				regexpPatternArr.push(")");
 
-				let regexp = new RegExp(regexpPatternArr.join(""), "i");
-
-				tripples.push({ regexp, replacement });
+				tripples.push({
+					regexp: new RegExp(regexpPatternArr.join(""), "i"),
+					replacement
+				});
 			});
 
 			tripplesObj[char] = tripples;
@@ -276,29 +267,29 @@ const KhaleesiEngine = {
 	},
 
 	/**
-	 * @param {String} iWord
-	 * @returns {String}
+	 * @param {string} word
+	 * @returns {string}
 	 */
-	replaceWord: iWord => {
+	replaceWord(word) {
 		if (!Object.keys(KhaleesiEngine.globalReplaces).length)
 			KhaleesiEngine.globalReplaces = KhaleesiEngine.getReplaces();
 
-		if (!KhaleesiUtils.hasCyrillics(iWord))
-			return iWord;
+		if (!KhaleesiUtils.hasCyrillics(word))
+			return word;
 
-		let result = new Array();
+		const result = [];
 
-		KhaleesiUtils.previousAndNext(iWord).forEach((group, groupIndex) => {
-			let [prevChar, currentChar, nextChar] = group;
-
-			let lowerCurrentChar = currentChar.toLowerCase();
-
+		KhaleesiUtils.previousAndNext(word).forEach((group) => {
+			const [prevChar, currentChar, nextChar] = group;
+			const lowerCurrentChar = currentChar.toLowerCase();
 
 			if (KhaleesiEngine.globalReplaces[lowerCurrentChar])
 				result.push(
 					KhaleesiEngine.replaceChar({
-						prevChar, currentChar, nextChar, lowerCurrentChar, groupIndex,
-						word: iWord
+						prevChar,
+						currentChar,
+						nextChar,
+						lowerCurrentChar,
 					})
 				);
 			else
@@ -309,22 +300,20 @@ const KhaleesiEngine = {
 	},
 
 	/**
-	 * @param {{prevChar: string, currentChar: string, nextChar: string, lowerCurrentChar: string, word: string, groupIndex: number}} iObj
-	 * @returns {String}
+	 * @param {{ prevChar: string, currentChar: string, nextChar: string, lowerCurrentChar: string }} replaceCharDTO
+	 * @returns {string}
 	 */
-	replaceChar: (iObj) => {
-		let {prevChar, currentChar, nextChar, lowerCurrentChar, word, groupIndex} = iObj,
-			currentCharReplacedFlag = false,
+	replaceChar(replaceCharDTO) {
+		const { prevChar, currentChar, nextChar, lowerCurrentChar } = replaceCharDTO;
+		let currentCharReplacedFlag = false,
 			replacedChar = currentChar;
 
 		KhaleesiEngine.globalReplaces[lowerCurrentChar].forEach((tripple) => {
 			if (currentCharReplacedFlag) return;
 
-
 			if (tripple.regexp.test(prevChar + currentChar + nextChar)) {
 				replacedChar = (prevChar + currentChar + nextChar).replace(tripple.regexp, tripple.replacement);
 				currentCharReplacedFlag = true;
-
 
 				replacedChar = replacedChar.toLowerCase();
 				if (currentChar !== lowerCurrentChar)
@@ -334,26 +323,25 @@ const KhaleesiEngine = {
 			};
 		});
 
-
 		return replacedChar;
 	}
 };
 
 /**
- * При необходимости заменяем на `const Khaleesi`
- * 
- * @param {String} iMessage
- * @returns {String}
+ * @param {string} message
+ * @returns {string}
  */
-module.exports = iMessage => {
-	let result = new Array();
+const Khaleesi = message => {
+	const result = [];
 
-	KhaleesiUtils.getWords(iMessage.trim()).map((word) => {
+	KhaleesiUtils.getWords(message.trim()).map((word) => {
 		if (word.length < 2)
 			result.push(word);
 		else
 			result.push(KhaleesiEngine.replaceWord(word));
 	});
 
-	return KhaleesiPostCorrection.getPostCorrection(result).join("");
+	return KhaleesiPostCorrection.postCorrection(result).join("");
 };
+
+export default Khaleesi;
