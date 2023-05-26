@@ -1,12 +1,13 @@
 # Khaleesi-JS
 
-Скрипт для имитирования речи Кхалиси. Работает на чистом JS без сторонних библиотек
+Скрипт для имитирования речи Кхалиси. Работает на чистом JS без сторонних библиотек. Имеются _Typescript declarations_
 
 ## Использование
 
-Установить через npm – `npm i github:serguun42/Khaleesi-JS`
+Установить через npm – `npm i @serguun42/khaleesi-js`
 
-Можно использовать и как ESM и как CommonJS-модуль:
+Можно импортировать и как ESM, и как CommonJS-модуль, в т.ч. в Typescript-проекты:
+
 ```javascript
 import Khaleesi from "khaleesi-js"; // ESM
 const Khaleesi = require("khaleesi-js"); // Или CommonJS
@@ -18,11 +19,11 @@ console.log(remade);
 ```
 
 ## Credit
+
 Изначально [@pongo](https://github.com/pongo/rapturebot) реализовал как модуль-команду для бота в Telegram.
 
---------
+---
 
-* Кхалиси – маленькие сиси
-* Кхяиси – мяенькие сеси
-* Кхяиси – мяеньгие сиси
-* Кхяеси – мяенькее сиси
+-   Кхяиси – хюдфий из ботёв в мийе
+-   Кхяиси – хюдший из ботёв в мийе
+-   Кхяеси – хюдший из потёв в мийи
