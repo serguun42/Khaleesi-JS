@@ -1,19 +1,25 @@
 {
 	"name": "khaleesi-js",
-	"version": "2.0.0",
+	"version": "3.0.0",
 	"description": "Скрипт для имитирования речи Кхалиси. Работает на чистом JS без сторонних библиотек.",
-	"main": "src/khaleesi.js",
-	"module": "src/khaleesi.mjs",
+	"type": "commonjs",
+	"main": "./khaleesi.cjs",
+	"module": "./khaleesi.mjs",
+	"types": "./khaleesi.d.ts",
 	"exports": {
-		".": {
-			"import": "./src/khaleesi.mjs",
-			"require": "./src/khaleesi.js"
-		}
+		"import": "./khaleesi.cjs",
+		"require": "./khaleesi.mjs",
+		"types": "./khaleesi.d.ts"
 	},
-	"scripts": {},
+	"author": "serguun42",
+	"license": "MIT",
+	"homepage": "https://npmjs.com/package/@serguun42/khaleesi-js",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/serguun42/Khaleesi-JS.git"
+	},
+	"bugs": {
+		"url": "https://github.com/serguun42/Khaleesi-JS/issues"
 	},
 	"keywords": [
 		"DTF",
@@ -22,10 +28,5 @@
 		"cmtt",
 		"Osnova"
 	],
-	"author": "serguun42",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/serguun42/Khaleesi-JS/issues"
-	},
-	"homepage": "https://github.com/serguun42/Khaleesi-JS#readme"
+	"scripts": {}
 }
