@@ -1,7 +1,7 @@
 {
-	"name": "khaleesi-js",
-	"version": "3.0.0",
-	"description": "Скрипт для имитирования речи Кхалиси. Работает на чистом JS без сторонних библиотек.",
+	"name": "@serguun42/khaleesi-js",
+	"version": "3.0.1",
+	"description": "Скрипт для имитирования речи Кхалиси. Работает на JS без сторонних библиотек, поддерживает Typescript (TS declarations)",
 	"type": "commonjs",
 	"main": "./khaleesi.cjs",
 	"module": "./khaleesi.mjs",
@@ -27,6 +27,5 @@
 		"Khaleesi",
 		"cmtt",
 		"Osnova"
-	],
-	"scripts": {}
+	]
 }
